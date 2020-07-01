@@ -1,33 +1,27 @@
 <template>
-  <div id="app">
-    WINGでどれだけのアピール値を出せるか計算するやつです<br>
-    // PアイドルのスキルとSアイドルのステータス＋スキルを入力します<br>
-    <InputIdolStatus></InputIdolStatus>
-    <ViewAppeal></ViewAppeal>
-  </div>
+  <v-app>
+    <v-content>
+      <NavigationBar></NavigationBar>
+      <WingDamageCalculator></WingDamageCalculator>
+    </v-content>
+  </v-app>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import InputIdolStatus from "./components/InputIdolStatus.vue"
-import ViewAppeal from "./components/ViewAppeal.vue"
+import Vue from "vue";
+import NavigationBar from "./components/NavigationBar.vue"
+import WingDamageCalculator from "./components/WingDamageCalculator.vue"
 
-@Component({
+export default Vue.extend({
+  name: "App",
+
   components: {
-    InputIdolStatus,
-    ViewAppeal
-  }
-})
-export default class App extends Vue {}
-</script>
+    NavigationBar,
+    WingDamageCalculator
+  },
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+  data: () => ({
+    supportIdol: []
+  })
+});
+</script>
