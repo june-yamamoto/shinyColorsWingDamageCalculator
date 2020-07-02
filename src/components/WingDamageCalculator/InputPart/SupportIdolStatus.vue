@@ -5,18 +5,24 @@
                   show-select
                   class="support-idol-input">
       <template v-slot:top>
-        <v-toolbar>
+        <v-toolbar flat class="elevation-1">
           <v-toolbar-title>
             Sアイドル
           </v-toolbar-title>
           <v-spacer></v-spacer>
-          <SupportIdolStatusEditDialog></SupportIdolStatusEditDialog>
+          <SupportIdolStatusEditDialog
+            :editedIdol="editedIdol"
+            :editedIndex="editedIndex"
+            :supportIdol="supportIdol"
+            @addSupportIdol="addSupportIdol"
+            @editSupportIdol="editSupportIdol"
+            @closeDialog="closeDialog"></SupportIdolStatusEditDialog>
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
         <v-icon small
                 class="mr-2"
-                @click="editIdol(item)">mdi-pencil</v-icon>
+                @click="throwEditSupportIdol(item)">mdi-pencil</v-icon>
         <v-icon small
                 class="mr-2"
                 @click="deleteIdol(item)">mdi-delete</v-icon>
@@ -31,6 +37,19 @@ import SupportIdolStatusEditDialog from "./SupportIdolStatusEditDialog"
 export default {
   components: {
     SupportIdolStatusEditDialog
+  },
+  props: {
+    supportIdol: {
+        name: String,
+        idolName: Number,
+        vocalStatus: Number,
+        danceStatus: Number,
+        visualStatus: Number,
+        vocalMagnification: Number,
+        danceMagnification: Number,
+        visualMagnification: Number,
+        skillType: String
+      }
   },
   data() {
     return {
@@ -68,27 +87,41 @@ export default {
           sortable: false
         }
       ],
-      supportIdol: [{
-        name: "駅真乃",
+      editedIdol: {},
+      editedIndex: -1,
+      defaultIdol: {
+        name: '',
         idolName: 0,
-        vocalStatus: 150,
-        danceStatus: 260,
-        visualStatus: 260,
+        vocalStatus: 0,
+        danceStatus: 0,
+        visualStatus: 0,
         vocalMagnification: 0,
-        danceMagnification: 2,
-        visualMagnification: 2,
+        danceMagnification: 0,
+        visualMagnification: 0,
         skillType: "normal"
-      }]
+      },
     }
   },
   methods: {
-      editIdol() {
-        console.log('editIdol');
-      },
-      deleteIdol() {
-        console.log('deleteIdol');
-      }
+    addSupportIdol() {
+      this.$emit('addSupportIdol', this.editedIdol);
+    },
+    editSupportIdol() {
+      this.$emit('editSupportIdol', this.editedIdol, this.editedIndex);
+      console.log('editIdol');
+    },
+    throwEditSupportIdol(item) {
+      this.editedIndex = this.supportIdol.indexOf(item);
+      this.editedIdol = Object.assign({}, item);
+    },
+    deleteIdol() {
+      console.log('deleteIdol');
+    },
+    closeDialog() {
+      this.editedIndex = -1;
+      this.editedIdol = this.defaultIdol;
     }
+  }
 };
 </script>
 

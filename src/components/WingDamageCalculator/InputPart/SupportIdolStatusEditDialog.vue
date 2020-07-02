@@ -1,8 +1,9 @@
 <template>
-  <v-dialog v-model="dialog"
+  <v-dialog v-model="isVisibleDialog"
             max-width="500">
     <template v-slot:activator="{on, attrs}">
       <v-btn  color="primary"
+              @click="openDialog"
               dark
               class="mb-2"
               v-bind="attrs"
@@ -76,22 +77,30 @@ export default {
   computed: {
     formTitle() {
       return "アイドルを追加する";
+    },
+    isVisibleDialog() {
+      const editedFlag = this.editedIndex !== -1;
+      return this.dialog || editedFlag;
     }
   },
+  props: {
+    editedIndex: Number,
+    editedIdol: {
+        name: String,
+        idolName: Number,
+        vocalStatus: Number,
+        danceStatus: Number,
+        visualStatus: Number,
+        vocalMagnification: Number,
+        danceMagnification: Number,
+        visualMagnification: Number,
+        skillType: String
+      }
+  },
+  // mounted() {},
   data() {
     return {
       dialog: false,
-      editedIdol: {
-        name: '',
-        idolName: 0,
-        vocalStatus: 0,
-        danceStatus: 0,
-        visualStatus: 0,
-        vocalMagnification: 0,
-        danceMagnification: 0,
-        visualMagnification: 0,
-        skillType: "normal"
-      },
       defaultIdol: {
         name: '',
         idolName: 0,
@@ -101,18 +110,29 @@ export default {
         vocalMagnification: 0,
         danceMagnification: 0,
         visualMagnification: 0,
-        skillType: "normal"
+        skillType: "Normal"
       },
-      skillTypeLists: ["normal","excellent"],
-      idolNameLists: ["さくらぎまの","かざのひおり","はちみやめぐる"]
+      skillTypeLists: ["Normal","Excellent"],
+      idolNameLists: ["さくらぎまの","かざのひおり","はちみやめぐる"],
+      on: false
     }
   },
   methods: {
+    openDialog() {
+      this.dialog = true;
+    },
     close() {
+      this.$emit('closeDialog');
       this.dialog = false;
     },
     save() {
       // ここに、アイドル追加の処理を書く
+      if(this.editedIndex > -1) {
+        this.$emit('editSupportIdol');
+      } else {
+        this.$emit('addSupportIdol');
+      }
+      this.$emit('closeDialog');
       this.dialog = false;
     }
   }
