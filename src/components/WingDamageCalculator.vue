@@ -1,17 +1,26 @@
 <template>
   <div class="root-card">
     <v-row justify="center">
-      <v-col cols="12" lg="8" md="10" sm="12">
-        <v-card>
+      <v-col cols="12" lg="10" md="11" sm="12">
+        <v-card class="second-card">
           <InputStatusPart
             :supportIdol="supportIdol"
             @addSupportIdol="addSupportIdol"
             @editSupportIdol="editSupportIdol"
             @deleteSupportIdol="deleteSupportIdol"
-            @updateProduceIdolStatus="updateProduceIdolStatus"></InputStatusPart>
+            @updateProduceIdolStatus="updateProduceIdolStatus"
+            @updateSelectedSupportIdol="updateSelectedSupportIdol"></InputStatusPart>
         </v-card>
-        <v-card>
-          <OutputPart></OutputPart>
+        <v-card class="second-card">
+          <SettingPart @updateSettings="updateSettings"></SettingPart>
+        </v-card>
+        <v-card class="second-card">
+          <OutputPart :supportIdol="selectedSupportIdol"
+                      :produceIdolStatus="produceIdolStatus"
+                      :produceIdolSkills="produceIdolSkills"
+                      :week="week"
+                      :buff="buff"
+                      v-if="this.selectedSupportIdol.length === 4"></OutputPart>
         </v-card>
       </v-col>
     </v-row>
@@ -20,12 +29,14 @@
 
 <script>
 import InputStatusPart from "./WingDamageCalculator/InputStatusPart"
+import SettingPart from "./WingDamageCalculator/SettingPart"
 import OutputPart from "./WingDamageCalculator/OutputPart"
 
 export default {
   components: {
     InputStatusPart,
-    OutputPart
+    OutputPart,
+    SettingPart
   },
   mounted() {
     this.initializeIdols();
@@ -33,20 +44,37 @@ export default {
   data() {
     return {
       supportIdol : [],
+      selectedIdol: [],
       produceIdolStatus : {
         name: "",
         vocalStatus: 50,
         danceStatus: 50,
         visualStatus: 50
       },
-      produceIdolSkills : []
+      produceIdolSkills : [],
+      week: 1,
+      buff: {
+        vocal: 100,
+        dance: 100,
+        visual: 100
+      }
+    }
+  },
+  computed: {
+    selectedSupportIdol() {
+      const selectedIdolLists = [];
+      this.selectedIdol.forEach(value => {
+        selectedIdolLists.push(this.supportIdol[value]);
+      });
+      return selectedIdolLists;
     }
   },
   methods: {
     initializeIdols() {
+      console.log('initialize');
       const defaultSupportIdol = {
         name: "駅真乃",
-        idolId: 0,
+        idolName: "櫻木真乃",
         vocalStatus: 150,
         danceStatus: 240,
         visualStatus: 300,
@@ -54,8 +82,50 @@ export default {
         danceMagnification: 2,
         visualMagnification: 2,
         skillType: "Normal"
+      };
+      const defaultSupportIdol2 = {
+        name: "釣りみ",
+        idolName: "田中摩美々",
+        vocalStatus: 263,
+        danceStatus: 233,
+        visualStatus: 238,
+        vocalMagnification: 3.5,
+        danceMagnification: 0,
+        visualMagnification: 0,
+        skillType: "Excellent"
+      };
+      const defaultSupportIdol3 = {
+        name: "ハッピー甘奈",
+        idolName: "大崎甘奈",
+        vocalStatus: 170,
+        danceStatus: 195,
+        visualStatus: 255,
+        vocalMagnification: 0,
+        danceMagnification: 0,
+        visualMagnification: 3,
+        skillType: "Normal"
+      };
+      const defaultSupportIdol4 = {
+        name: "夜明け凛世",
+        idolName: "杜野凛世",
+        vocalStatus: 150,
+        danceStatus: 360,
+        visualStatus: 190,
+        vocalMagnification: 0,
+        danceMagnification: 2.5,
+        visualMagnification: 0,
+        skillType: "Excellent"
+      };
+      const produceIdolStatus = {
+        name: "アルテマ夏葉",
+        vocalStatus: 300,
+        danceStatus: 515,
+        visualStatus: 515
       }
       this.addSupportIdol(defaultSupportIdol);
+      this.addSupportIdol(defaultSupportIdol2);
+      this.addSupportIdol(defaultSupportIdol3);
+      this.addSupportIdol(defaultSupportIdol4);
     },
     addSupportIdol(idolObject) {
       this.supportIdol.push(idolObject);
@@ -67,13 +137,21 @@ export default {
       this.supportIdol.splice(index, 1);
     },
     updateProduceIdolStatus(produceIdolStatus, produceIdolSkills) {
+      console.log("updateProduceIdolStatus");
       this.produceIdolStatus.name = produceIdolStatus.name;
       this.produceIdolStatus.vocalStatus = produceIdolStatus.vocalStatus;
       this.produceIdolStatus.danceStatus = produceIdolStatus.danceStatus;
       this.produceIdolStatus.visualStatus = produceIdolStatus.visualStatus;
       this.produceIdolSkills = produceIdolSkills;
-      console.log('updateProduceIdolStatus', this.produceIdolStatus);
-      console.log('updateProduceIdolSkills', this.produceIdolSkills);
+    },
+    updateSettings(week, buff) {
+      this.week = Number(week);
+      this.buff.vocal = Number(buff.vocal);
+      this.buff.dance = Number(buff.dance);
+      this.buff.visual = Number(buff.visual);
+    },
+    updateSelectedSupportIdol(selectedIdol) {
+      this.selectedIdol = selectedIdol;
     }
   }
 }
@@ -81,6 +159,9 @@ export default {
 
 <style scoped lang="scss">
 .root-card {
+  margin: 10px;
+}
+.second-card {
   margin: 10px;
 }
 </style>

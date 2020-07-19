@@ -4,6 +4,7 @@
       @addSupportIdol="addSupportIdol"
       @editSupportIdol="editSupportIdol"
       @deleteSupportIdol="deleteSupportIdol"
+      @updateSelectedSupportIdol="updateSelectedSupportIdol"
       :supportIdol="supportIdol"
     ></SupportIdolStatus>
     <ProduceIdolStatus @updateIdolStatus="updateIdolStatus"></ProduceIdolStatus>
@@ -43,8 +44,10 @@ export default {
       this.$emit("deleteSupportIdol", index);
     },
     updateIdolStatus(produceIdolStatus, produceIdolSkills) {
-      console.log("updateIdolStatus", produceIdolStatus, produceIdolSkills);
       this.$emit("updateProduceIdolStatus", produceIdolStatus, produceIdolSkills);
+    },
+    updateSelectedSupportIdol(selectedIdol) {
+      this.$emit('updateSelectedSupportIdol', selectedIdol);
     }
   }
 };

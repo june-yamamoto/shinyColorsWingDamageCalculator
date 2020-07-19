@@ -9,47 +9,68 @@
       </v-card-title>
       <v-card-text>
         <v-container>
-          <v-row>
-            <v-col cols="12" sm="4" md="4">
-              <v-text-field v-model="editedIdol.name" label="名前"></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="4" md="4">
-              <v-select :items="idolNameLists" label="アイドル名" v-model="editedIdol.idolId" outlined></v-select>
-            </v-col>
-            <v-col cols="12" sm="4" md="4"></v-col>
-            <v-col cols="12" sm="4" md="4">
-              <v-text-field v-model="editedIdol.vocalStatus" label="Voステ"></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="4" md="4">
-              <v-text-field v-model="editedIdol.danceStatus" label="Daステ"></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="4" md="4">
-              <v-text-field v-model="editedIdol.visualStatus" label="Viステ"></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="4" md="4">
-              <v-text-field v-model="editedIdol.vocalMagnification" label="Vo倍率"></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="4" md="4">
-              <v-text-field v-model="editedIdol.danceMagnification" label="Da倍率"></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="4" md="4">
-              <v-text-field v-model="editedIdol.visualMagnification" label="Vi倍率"></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="6" md="6" class="skill-dropdown">
-              <v-select
-                :items="skillTypeLists"
-                label="スキルのタイプ"
-                v-model="editedIdol.skillType"
-                outlined
-              ></v-select>
-            </v-col>
-          </v-row>
+          <v-form ref="form" v-model="valid">
+            <v-row>
+              <v-col cols="12" sm="4" md="4">
+                <v-text-field v-model="editedIdol.name" label="名前" :rules="nameRules"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="4" md="4">
+                <v-select
+                  :items="idolNameLists"
+                  label="アイドル名"
+                  v-model="editedIdol.idolName"
+                  outlined
+                  :rules="selectRules"
+                ></v-select>
+              </v-col>
+              <v-col cols="12" sm="4" md="4"></v-col>
+              <v-col cols="12" sm="4" md="4">
+                <v-text-field v-model.number="editedIdol.vocalStatus" label="Voステ" :rules="statusRules"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="4" md="4">
+                <v-text-field v-model.number="editedIdol.danceStatus" label="Daステ" :rules="statusRules"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="4" md="4">
+                <v-text-field v-model.number="editedIdol.visualStatus" label="Viステ" :rules="statusRules"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="4" md="4">
+                <v-text-field
+                  v-model.number="editedIdol.vocalMagnification"
+                  label="Vo倍率"
+                  :rules="skillRules"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="4" md="4">
+                <v-text-field
+                  v-model.number="editedIdol.danceMagnification"
+                  label="Da倍率"
+                  :rules="skillRules"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="4" md="4">
+                <v-text-field
+                  v-model.number="editedIdol.visualMagnification"
+                  label="Vi倍率"
+                  :rules="skillRules"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="6" class="skill-dropdown">
+                <v-select
+                  :items="skillTypeLists"
+                  label="スキルのタイプ"
+                  v-model="editedIdol.skillType"
+                  outlined
+                  :rules="selectRules"
+                ></v-select>
+              </v-col>
+            </v-row>
+          </v-form>
         </v-container>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="close">キャンセル</v-btn>
-        <v-btn color="blue darken-1" text @click="save">追加</v-btn>
+        <v-btn color="blue darken-1" text @click="save" :disabled="!valid">追加</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -60,7 +81,9 @@ export default {
   components: {},
   computed: {
     formTitle() {
-      return "アイドルを追加する";
+      return this.editedIndex === -1
+        ? "アイドルを追加する"
+        : "アイドルを編集する";
     },
     isVisibleDialog() {
       const editedFlag = this.editedIndex !== -1;
@@ -71,7 +94,7 @@ export default {
     editedIndex: Number,
     editedIdol: {
       name: String,
-      idolName: Number,
+      idolName: String,
       vocalStatus: Number,
       danceStatus: Number,
       visualStatus: Number,
@@ -81,13 +104,17 @@ export default {
       skillType: String
     }
   },
-  // mounted() {},
+  mounted() {
+    this.mounted = true;
+  },
   data() {
     return {
+      valid: false,
+      mounted: false,
       dialog: false,
       defaultIdol: {
         name: "",
-        idolName: 0,
+        idolName: "櫻木真乃",
         vocalStatus: 0,
         danceStatus: 0,
         visualStatus: 0,
@@ -97,8 +124,12 @@ export default {
         skillType: "Normal"
       },
       skillTypeLists: ["Normal", "Excellent"],
-      idolNameLists: ["さくらぎまの", "かざのひおり", "はちみやめぐる"],
-      on: false
+      idolNameLists: ["櫻木真乃", "風野灯織", "はちみやめぐる", "田中摩美々", "大崎甘奈", "杜野凛世"],
+      on: false,
+      statusRules: [v => /^([1-9]\d*|0)$/.test(v) || "正の整数値"],
+      skillRules: [v => (v >= 0 && !isNaN(v)) || "正の数"],
+      nameRules: [v => (v && v.length > 0) || "何か入力してください"],
+      selectRules: [v => (v && v.length > 0) || "何か選択してください"]
     };
   },
   methods: {
