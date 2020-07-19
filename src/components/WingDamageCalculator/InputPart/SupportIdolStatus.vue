@@ -41,7 +41,7 @@ export default {
   props: {
     supportIdol: {
         name: String,
-        idolName: Number,
+        idolId: Number,
         vocalStatus: Number,
         danceStatus: Number,
         visualStatus: Number,
@@ -98,7 +98,7 @@ export default {
         vocalMagnification: 0,
         danceMagnification: 0,
         visualMagnification: 0,
-        skillType: "normal"
+        skillType: "Normal"
       },
     }
   },
@@ -114,8 +114,9 @@ export default {
       this.editedIndex = this.supportIdol.indexOf(item);
       this.editedIdol = Object.assign({}, item);
     },
-    deleteIdol() {
-      console.log('deleteIdol');
+    deleteIdol(item) {
+      const deleteIdolIndex = this.supportIdol.indexOf(item);
+      this.$emit('deleteSupportIdol', deleteIdolIndex);
     },
     closeDialog() {
       this.editedIndex = -1;
