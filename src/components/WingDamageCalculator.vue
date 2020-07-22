@@ -19,7 +19,7 @@
                       :produceIdolStatus="produceIdolStatus"
                       :produceIdolSkills="produceIdolSkills"
                       :week="week"
-                      :buff="buff"
+                      :buff="buffPercentage"
                       v-if="this.selectedSupportIdol.length === 4"></OutputPart>
         </v-card>
       </v-col>
@@ -54,9 +54,9 @@ export default {
       produceIdolSkills : [],
       week: 1,
       buff: {
-        vocal: 100,
-        dance: 100,
-        visual: 100
+        vocal: 0,
+        dance: 0,
+        visual: 0
       }
     }
   },
@@ -67,65 +67,83 @@ export default {
         selectedIdolLists.push(this.supportIdol[value]);
       });
       return selectedIdolLists;
+    },
+    buffPercentage() {
+      const buff = {};
+      buff.vocal = (this.buff.vocal + 100)/100;
+      buff.dance = (this.buff.dance + 100)/100;
+      buff.visual = (this.buff.visual + 100)/100;
+      return buff
     }
   },
   methods: {
     initializeIdols() {
-      console.log('initialize');
-      const defaultSupportIdol = {
-        name: "駅真乃",
-        idolName: "櫻木真乃",
-        vocalStatus: 150,
-        danceStatus: 240,
-        visualStatus: 300,
-        vocalMagnification: 0,
-        danceMagnification: 2,
-        visualMagnification: 2,
-        skillType: "Normal"
-      };
-      const defaultSupportIdol2 = {
-        name: "釣りみ",
-        idolName: "田中摩美々",
-        vocalStatus: 263,
-        danceStatus: 233,
-        visualStatus: 238,
-        vocalMagnification: 3.5,
-        danceMagnification: 0,
-        visualMagnification: 0,
-        skillType: "Excellent"
-      };
-      const defaultSupportIdol3 = {
-        name: "ハッピー甘奈",
-        idolName: "大崎甘奈",
-        vocalStatus: 170,
-        danceStatus: 195,
-        visualStatus: 255,
-        vocalMagnification: 0,
-        danceMagnification: 0,
-        visualMagnification: 3,
-        skillType: "Normal"
-      };
-      const defaultSupportIdol4 = {
-        name: "夜明け凛世",
-        idolName: "杜野凛世",
-        vocalStatus: 150,
-        danceStatus: 360,
-        visualStatus: 190,
-        vocalMagnification: 0,
-        danceMagnification: 2.5,
-        visualMagnification: 0,
-        skillType: "Excellent"
-      };
-      const produceIdolStatus = {
-        name: "アルテマ夏葉",
-        vocalStatus: 300,
-        danceStatus: 515,
-        visualStatus: 515
+      const test = false;
+      // console.log('initialize');
+      if(test) {
+        const defaultSupportIdol = {
+          name: "駅真乃",
+          idolName: "櫻木真乃",
+          vocalStatus: 150,
+          danceStatus: 240,
+          visualStatus: 300,
+          vocalMagnification: 0,
+          danceMagnification: 2,
+          visualMagnification: 2,
+          skillType: "Normal"
+        };
+        const defaultSupportIdol2 = {
+          name: "釣りみ",
+          idolName: "田中摩美々",
+          vocalStatus: 263,
+          danceStatus: 233,
+          visualStatus: 238,
+          vocalMagnification: 3.5,
+          danceMagnification: 0,
+          visualMagnification: 0,
+          skillType: "Excellent"
+        };
+        const defaultSupportIdol3 = {
+          name: "ハッピー甘奈",
+          idolName: "大崎甘奈",
+          vocalStatus: 170,
+          danceStatus: 195,
+          visualStatus: 255,
+          vocalMagnification: 0,
+          danceMagnification: 0,
+          visualMagnification: 3,
+          skillType: "Normal"
+        };
+        const defaultSupportIdol4 = {
+          name: "夜明け凛世",
+          idolName: "杜野凛世",
+          vocalStatus: 150,
+          danceStatus: 360,
+          visualStatus: 190,
+          vocalMagnification: 0,
+          danceMagnification: 2.5,
+          visualMagnification: 0,
+          skillType: "Normal"
+        };
+        this.addSupportIdol(defaultSupportIdol);
+        this.addSupportIdol(defaultSupportIdol2);
+        this.addSupportIdol(defaultSupportIdol3);
+        this.addSupportIdol(defaultSupportIdol4);
+      } else {
+        const defaultSupportIdol = {
+          name: "",
+          idolName: "",
+          vocalStatus: 0,
+          danceStatus: 0,
+          visualStatus: 0,
+          vocalMagnification: 0,
+          danceMagnification: 0,
+          visualMagnification: 0,
+          skillType: "Normal"
+        };
+        this.addSupportIdol(Object.assign({}, defaultSupportIdol));
       }
-      this.addSupportIdol(defaultSupportIdol);
-      this.addSupportIdol(defaultSupportIdol2);
-      this.addSupportIdol(defaultSupportIdol3);
-      this.addSupportIdol(defaultSupportIdol4);
+
     },
     addSupportIdol(idolObject) {
       this.supportIdol.push(idolObject);
@@ -137,7 +155,7 @@ export default {
       this.supportIdol.splice(index, 1);
     },
     updateProduceIdolStatus(produceIdolStatus, produceIdolSkills) {
-      console.log("updateProduceIdolStatus");
+      // console.log("updateProduceIdolStatus");
       this.produceIdolStatus.name = produceIdolStatus.name;
       this.produceIdolStatus.vocalStatus = produceIdolStatus.vocalStatus;
       this.produceIdolStatus.danceStatus = produceIdolStatus.danceStatus;

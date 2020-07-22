@@ -1,9 +1,10 @@
 <template>
   <div>
     <v-card flat class="elevation-2">
-      <v-card-title>
+      <v-card-title style="padding:8px;">
         Sアイドル
         <v-spacer></v-spacer>
+        <v-checkbox v-model="visibleTable" label="Sアイドルを表示する"></v-checkbox>
         <SupportIdolStatusEditDialog
           :editedIdol="editedIdol"
           :editedIndex="editedIndex"
@@ -13,19 +14,19 @@
           @closeDialog="closeDialog"
         ></SupportIdolStatusEditDialog>
       </v-card-title>
-      <v-data-table :headers="supportIdolHeader" :items="supportIdol" class="support-idol-input" dense>
+      <v-data-table :headers="supportIdolHeader" :items="supportIdol" class="support-idol-input" dense v-show="visibleTable">
         <template v-slot:item.actions="{ item }">
           <v-btn
-            class="mr-2 blue lighten-5"
+            class="mr-2 blue lighten-5 selection-button"
+            small
             @click="toggleSelected(item)"
             v-if="selected(item)"
-            style="width: 80px"
           >使う</v-btn>
           <v-btn
-            class="mr-2"
+            class="mr-2 selection-button"
+            small
             @click="toggleSelected(item)"
             v-if="!selected(item)"
-            style="width: 80px"
           >使わない</v-btn>
           <v-icon small class="mr-2" @click="throwEditSupportIdol(item)">mdi-pencil</v-icon>
           <v-icon small class="mr-2" @click="deleteIdol(item)">mdi-delete</v-icon>
@@ -58,6 +59,7 @@ export default {
   computed: {},
   data() {
     return {
+      visibleTable: true,
       selectedSupportIdol: [],
       supportIdolHeader: [
         {
@@ -154,7 +156,7 @@ export default {
         this.selectedSupportIdol.splice(index, 1);
         this.$emit('updateSelectedSupportIdol', this.selectedSupportIdol);
       }
-      console.log(this.selectedSupportIdol);
+      // console.log(this.selectedSupportIdol);
     },
     selected(item) {
       const selectedIndex = this.supportIdol.indexOf(item);
@@ -164,4 +166,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.selection-button {
+  width: 60px;
+  height: 30px;
+}
+</style>

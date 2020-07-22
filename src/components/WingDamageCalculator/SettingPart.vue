@@ -18,23 +18,29 @@
             </v-col>
             <v-col cols="12" sm="3">
               <v-text-field v-model.number="buff.vocal"
-                            label="Vocalバフ倍率"
+                            label="Vocalバフ (%)"
                             dense
-                            :rules="buffRules">
+                            type="number"
+                            :rules="buffRules"
+                            class="buff-class">
               </v-text-field>
             </v-col>
             <v-col cols="12" sm="3">
               <v-text-field v-model.number="buff.dance"
-                            label="Danceバフ倍率"
+                            label="Danceバフ (%)"
                             dense
-                            :rules="buffRules">
+                            type="number"
+                            :rules="buffRules"
+                            class="buff-class">
               </v-text-field>
             </v-col>
             <v-col cols="12" sm="3">
               <v-text-field v-model.number="buff.visual"
-                            label="Visualバフ倍率"
+                            label="Visualバフ (%)"
                             dense
-                            :rules="buffRules">
+                            type="number"
+                            :rules="buffRules"
+                            class="buff-class">
               </v-text-field>
             </v-col>
           </v-row>
@@ -53,9 +59,9 @@ export default {
       max: 33,
       min: 1,
       buff: {
-        vocal: 100,
-        dance: 100,
-        visual: 100
+        vocal: 0,
+        dance: 0,
+        visual: 0
       },
       buffRules: [
         v => /^([1-9]\d*|0)$/.test(v) || "正の整数値"
@@ -80,5 +86,8 @@ export default {
 <style scoped>
 .slider-col {
   margin-top: 27px;
+}
+.buff-class {
+  font-size: 30px;
 }
 </style>
