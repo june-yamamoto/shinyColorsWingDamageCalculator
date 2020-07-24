@@ -166,12 +166,22 @@ export default {
           visualMagnification: 0,
           skillType: "Normal"
         };
-        this.produceIdolStatus = Object.assign({}, produceIdolStatus);
-        this.produceIdolSkills.push(Object.assign({}, newObject));
-        this.produceIdolSkills.push(Object.assign({}, newObject));
-        this.produceIdolSkills.push(Object.assign({}, newObject));
-        this.produceIdolSkills.push(Object.assign({}, newObject));
-      }
+        const savedProduceIdolStatus = JSON.parse(localStorage.getItem('produceIdolStatus'));
+        const savedProduceIdolSkills = JSON.parse(localStorage.getItem('produceIdolSkills'));
+        if(savedProduceIdolStatus && savedProduceIdolSkills) {
+          this.produceIdolStatus = savedProduceIdolStatus;
+          this.produceIdolSkills.push(savedProduceIdolSkills[0]);
+          this.produceIdolSkills.push(savedProduceIdolSkills[1]);
+          this.produceIdolSkills.push(savedProduceIdolSkills[2]);
+          this.produceIdolSkills.push(savedProduceIdolSkills[3]);
+        } else {
+          this.produceIdolStatus = Object.assign({}, produceIdolStatus);
+          this.produceIdolSkills.push(Object.assign({}, newObject));
+          this.produceIdolSkills.push(Object.assign({}, newObject));
+          this.produceIdolSkills.push(Object.assign({}, newObject));
+          this.produceIdolSkills.push(Object.assign({}, newObject));
+        }
+        }
 
     },
     updateIdolStatus() {

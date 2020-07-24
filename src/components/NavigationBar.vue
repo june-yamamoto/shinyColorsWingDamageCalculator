@@ -2,7 +2,7 @@
   <v-app-bar>
     <v-btn @click="natsuha()">Wing計算機</v-btn>
     <v-spacer></v-spacer>
-    ver 0.1.0
+    ver 0.1.1
   </v-app-bar>
 </template>
 

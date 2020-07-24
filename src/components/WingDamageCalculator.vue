@@ -9,7 +9,8 @@
             @editSupportIdol="editSupportIdol"
             @deleteSupportIdol="deleteSupportIdol"
             @updateProduceIdolStatus="updateProduceIdolStatus"
-            @updateSelectedSupportIdol="updateSelectedSupportIdol"></InputStatusPart>
+            @updateSelectedSupportIdol="updateSelectedSupportIdol"
+            @saveLocalStorage="saveLocalStorage"></InputStatusPart>
         </v-card>
         <v-card class="second-card">
           <SettingPart @updateSettings="updateSettings"></SettingPart>
@@ -130,20 +131,17 @@ export default {
         this.addSupportIdol(defaultSupportIdol3);
         this.addSupportIdol(defaultSupportIdol4);
       } else {
-        const defaultSupportIdol = {
-          name: "",
-          idolName: "",
-          vocalStatus: 0,
-          danceStatus: 0,
-          visualStatus: 0,
-          vocalMagnification: 0,
-          danceMagnification: 0,
-          visualMagnification: 0,
-          skillType: "Normal"
-        };
-        this.addSupportIdol(Object.assign({}, defaultSupportIdol));
-      }
+        // console.log('localStorage', JSON.parse(localStorage.getItem('supportIdolLists')));
+        const savedSupportIdolLists = JSON.parse(localStorage.getItem('supportIdolLists'));
+        const savedProduceIdolStatus = JSON.parse(localStorage.getItem('produceIdolStatus'));
+        const savedProduceIdolSkills = JSON.parse(localStorage.getItem('produceIdolSkills'));
+        if(savedSupportIdolLists) {
+          for(let i = 0; i < savedSupportIdolLists.length ; i++) {
+            this.addSupportIdol(savedSupportIdolLists[i]);
+          };
+        }
 
+      }
     },
     addSupportIdol(idolObject) {
       this.supportIdol.push(idolObject);
@@ -155,7 +153,6 @@ export default {
       this.supportIdol.splice(index, 1);
     },
     updateProduceIdolStatus(produceIdolStatus, produceIdolSkills) {
-      // console.log("updateProduceIdolStatus");
       this.produceIdolStatus.name = produceIdolStatus.name;
       this.produceIdolStatus.vocalStatus = produceIdolStatus.vocalStatus;
       this.produceIdolStatus.danceStatus = produceIdolStatus.danceStatus;
@@ -170,6 +167,12 @@ export default {
     },
     updateSelectedSupportIdol(selectedIdol) {
       this.selectedIdol = selectedIdol;
+    },
+    saveLocalStorage() {
+      localStorage.setItem('supportIdolLists', JSON.stringify(this.supportIdol));
+      localStorage.setItem('produceIdolStatus', JSON.stringify(this.produceIdolStatus));
+      localStorage.setItem('produceIdolSkills', JSON.stringify(this.produceIdolSkills));
+      alert('アイドル情報を保存しました');
     }
   }
 }

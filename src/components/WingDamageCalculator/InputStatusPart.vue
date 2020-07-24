@@ -5,6 +5,7 @@
       @editSupportIdol="editSupportIdol"
       @deleteSupportIdol="deleteSupportIdol"
       @updateSelectedSupportIdol="updateSelectedSupportIdol"
+      @saveLocalStorage="saveLocalStorage"
       :supportIdol="supportIdol"
     ></SupportIdolStatus>
     <ProduceIdolStatus @updateIdolStatus="updateIdolStatus"></ProduceIdolStatus>
@@ -48,6 +49,9 @@ export default {
     },
     updateSelectedSupportIdol(selectedIdol) {
       this.$emit('updateSelectedSupportIdol', selectedIdol);
+    },
+    saveLocalStorage() {
+      this.$emit('saveLocalStorage');
     }
   }
 };

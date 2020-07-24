@@ -12,7 +12,7 @@
                         :thumb-size="50"
                         thumb-label="always">
                 <template v-slot:thumb-label="{value}">
-                  {{ value === 33 ? "決勝" : value === 32 ? "準決勝" : value + "週目" }}
+                  {{ value === 34 ? "決勝" : value === 33 ? "準決勝" : value + "週目" }}
                 </template>
               </v-slider>
             </v-col>
@@ -56,7 +56,7 @@ export default {
     return {
       valid: false,
       week: 1,
-      max: 33,
+      max: 34,
       min: 1,
       buff: {
         vocal: 0,
@@ -70,13 +70,13 @@ export default {
   },
   computed: {
     weekValue(value) {
-      return value === 33 ? "決勝" : value === 32 ? "準決勝" : value;
+      return value === 34 ? "決勝" : value === 33 ? "準決勝" : value;
     }
   },
   methods: {
     updateSettings() {
       if(this.valid) {
-        this.$emit('updateSettings', this.week, this.buff);
+        this.$emit('updateSettings', this.week - 1, this.buff);
       }
     }
   }

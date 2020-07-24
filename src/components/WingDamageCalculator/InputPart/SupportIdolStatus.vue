@@ -13,6 +13,7 @@
           @editSupportIdol="editSupportIdol"
           @closeDialog="closeDialog"
         ></SupportIdolStatusEditDialog>
+        <v-btn color="primary" @click="saveLocalStorage" dark class="mb-2 save-button">保存</v-btn>
       </v-card-title>
       <v-data-table :headers="supportIdolHeader" :items="supportIdol" class="support-idol-input" dense v-show="visibleTable">
         <template v-slot:item.actions="{ item }">
@@ -161,6 +162,9 @@ export default {
     selected(item) {
       const selectedIndex = this.supportIdol.indexOf(item);
       return this.selectedSupportIdol.includes(selectedIndex);
+    },
+    saveLocalStorage() {
+      this.$emit('saveLocalStorage');
     }
   }
 };
@@ -170,5 +174,9 @@ export default {
 .selection-button {
   width: 60px;
   height: 30px;
+}
+.save-button {
+  margin-left: 10px;
+  /* width: 10px; */
 }
 </style>

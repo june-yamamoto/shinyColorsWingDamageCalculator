@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="isVisibleDialog" max-width="500">
     <template v-slot:activator="{on, attrs}">
-      <v-btn color="primary" @click="openDialog" dark class="mb-2" v-bind="attrs" v-on="on">追加</v-btn>
+      <v-btn color="primary" @click="openDialog" dark class="mb-2 add-button" v-bind="attrs" v-on="on">追加</v-btn>
     </template>
     <v-card>
       <v-card-title>
@@ -125,7 +125,7 @@ export default {
       },
       skillTypeLists: ["Normal", "Excellent"],
       idolNameLists: ["櫻木 真乃", "風野 灯織", "八宮 めぐる",
-                      "月岡 恋鐘","幽谷 霧子","田中 魔美々","白瀬 咲耶", "三峰 結華",
+                      "月岡 恋鐘","幽谷 霧子","田中 摩美々","白瀬 咲耶", "三峰 結華",
                       "桑山 千雪","大崎 甜花", "大崎 甘奈",
                       "小宮 果穂","園田 智代子","杜野 凛世","西城 樹里","有栖川 夏葉",
                       "芹沢 あさひ","黛 冬優子","和泉 愛依",
@@ -162,5 +162,8 @@ export default {
 <style scoped>
 .v-select .skill-dropdown {
   font-size: 1.2em;
+}
+.add-button {
+  margin-left: 10px;
 }
 </style>
